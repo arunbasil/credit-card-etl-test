@@ -1,0 +1,19 @@
+# Example config.yaml
+data_paths:
+  source: "s3://your-etl-bucket/incoming/source_transactions.csv" # Use env var substitution in Jenkins if needed
+  target: "s3://your-etl-bucket/processed/target_transactions.csv"
+report_paths:
+  duplicate_source_output: "reports/duplicate_source_transactions.csv"
+  pytest_html_report: "reports/pytest_report.html"
+transformation_rules:
+  tax_rate: 0.05
+  min_transaction_amount: 10.00
+key_columns:
+  source_duplicate_check:
+    - customer_id
+    - transaction_date
+    - amount
+    - merchant
+  aggregation_group_by:
+    - cust_id # Target column name
+    - transaction_dt # Target column name
