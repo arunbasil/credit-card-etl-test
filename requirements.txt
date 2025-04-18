@@ -1,0 +1,16 @@
+# Core AWS SDK for S3 interaction
+boto3
+s3fs
+# Data manipulation for ETL
+pandas
+numpy  # Often used with pandas
+
+# Testing framework
+pytest
+
+# Reporting for pytest results
+pytest-html  # Generates HTML reports
+pytest-cov   # Generates code coverage reports (often useful)
+
+#Configuration files (recommended)
+pyyaml

@@ -1,0 +1,3 @@
+data_paths:
+  source: "s3://credit-card-trans-2025/source/credit_card_source.csv"
+  target: "s3://credit-card-trans-2025/target/credit_card_target.csv"
