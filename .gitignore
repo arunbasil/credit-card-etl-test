@@ -1,0 +1,21 @@
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environment
+.venv/
+venv/
+
+# Reports and logs
+reports/
+*.html
+
+# Data
+*.csv
+*.env
+data/
+
+# IDE & OS junk
+.idea/
+.DS_Store
