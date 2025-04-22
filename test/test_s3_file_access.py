@@ -61,7 +61,7 @@ def s3_paths():
 #         pytest.fail(f"Could not access source CSV: {e}")
 
 def test_can_access_target_file(s3_paths):
-    """Check if target CSV in S3 is accessible."""
+
     try:
         logger.info(f"Attempting to read target file from: {s3_paths['target']}")
         df = pd.read_csv(s3_paths["target"])
