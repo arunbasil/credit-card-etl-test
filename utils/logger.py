@@ -1,25 +1,21 @@
+import os
 import logging
 
-def get_logger(name=__name__):
+
+def get_logger(name):
+    log_dir = "test/logs"
+    os.makedirs(log_dir, exist_ok=True)  # Ensure directory exists
+
+    log_file = os.path.join(log_dir, "test.log")
+
     logger = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
 
-    if not logger.handlers:
-        logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler(log_file)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
 
-        formatter = logging.Formatter(
-            '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
-        )
-
-        # Console handler
-        stream_handler = logging.StreamHandler()
-        stream_handler.setFormatter(formatter)
-        logger.addHandler(stream_handler)
-
-        # Optional: Uncomment to log to file as well
-        file_handler = logging.FileHandler("logs/test.log")
-        file_handler.setFormatter(formatter)
+    if not logger.hasHandlers():
         logger.addHandler(file_handler)
-
-        logger.propagate = False  # Prevent duplicate logs in pytest
 
     return logger

@@ -1,3 +1,7 @@
 2025-04-18 20:57:43,268 - INFO - test_s3_file_access - Loading S3 paths from YAML config file
 2025-04-18 20:57:43,268 - INFO - test_s3_file_access - Attempting to read target file: s3://credit-card-trans-2025/target/credit_card_target.csv
 2025-04-18 20:57:43,453 - INFO - test_s3_file_access - Loaded target CSV with 10 rows
+2025-04-18 21:32:51,861 - INFO - test.test_s3_file_access - Loading S3 paths from YAML config file
+2025-04-18 21:32:51,862 - INFO - test.test_s3_file_access - Validating row consistency in source CSV
+2025-04-18 21:32:51,998 - INFO - test.test_s3_file_access - Header has 9 columns
+2025-04-18 21:32:51,998 - ERROR - test.test_s3_file_access - Inconsistent column count at line 2
