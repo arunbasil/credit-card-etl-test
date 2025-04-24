@@ -1,0 +1,5 @@
+# requirements.in
+s3fs>=2025.3.2
+pytest
+pandas
+PyYAML
