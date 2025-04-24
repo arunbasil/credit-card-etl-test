@@ -24,6 +24,7 @@ def test_can_access_target_file(s3_paths):
         df = pd.read_csv(s3_paths["target"])
         logger.info(f"Loaded target CSV with {len(df)} rows")
         assert not df.empty
+        logger.info(f"Loaded target CSV with {len(df)} rows")
     except Exception as e:
         logger.exception("Could not access target CSV")
         pytest.fail(f"Could not access target CSV: {e}")
