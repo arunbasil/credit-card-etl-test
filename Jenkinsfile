@@ -1,10 +1,11 @@
 pipeline {
-    agent any
+    agent any // Use any available agent (ensure it has Python3, pip, git)
 
     stages {
         stage('Clone') {
             steps {
                 echo "Cloning repository..."
+                // Fetches the code from the SCM configured in the Jenkins job
                 checkout scm
             }
         }
@@ -13,9 +14,11 @@ pipeline {
             steps {
                 echo "Setting up Python virtual environment..."
                 sh '''
+                    # Ensure python3 is available on the agent
                     python3 -m venv venv
                     source venv/bin/activate
                     pip install --upgrade pip
+                    # Installs dependencies from your committed requirements.txt
                     pip install -r requirements.txt
                 '''
             }
@@ -23,53 +26,28 @@ pipeline {
 
         stage('Run Pytest') {
             steps {
-                echo "Running tests and generating HTML report..."
+                echo "Running tests..."
                 sh '''
+                    # Activate the virtual environment within this shell step
                     source venv/bin/activate
-                    mkdir -p test/logs reports
-                    pytest tests/ \
-                        --html=reports/report.html \
-                        --self-contained-html \
-                        --maxfail=1 \
-                        --disable-warnings \
-                        -q > test/logs/test_output.log
+                    # Run pytest on the 'test/' directory
+                    # --maxfail=1 stops the run on the first failing test
+                    # Removed report generation, quiet mode, and log redirection
+                    pytest test/ --maxfail=1
                 '''
             }
         }
-
-        stage('Upload Report to S3') {
-            steps {
-                echo "Uploading report.html to S3 bucket..."
-                sh '''
-                    aws s3 cp reports/report.html s3://your-s3-bucket-name/project-x/$(date +%F)/report.html
-                '''
-            }
-        }
-
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'test/logs/test_output.log', fingerprint: true
-                archiveArtifacts artifacts: 'reports/report.html', fingerprint: true
-            }
-        }
-
-        stage('Publish Report to Jenkins') {
-            steps {
-                publishHTML([
-                    reportDir: 'reports',
-                    reportFiles: 'report.html',
-                    reportName: 'Pytest HTML Report'
-                ])
-            }
-        }
+        // Removed stages: 'Upload Report to S3', 'Archive Artifacts', 'Publish Report to Jenkins'
     }
 
     post {
+        // Basic messages about the build outcome
         always {
             echo "Pipeline completed with status: ${currentBuild.currentResult}"
         }
         failure {
-            echo "Build failed. Please check the logs."
+            echo "Build failed. Please check the console output for errors."
+            // You could add notifications here (e.g., Slack, email) if desired
         }
     }
 }
