@@ -30,10 +30,14 @@ idna==3.10
     # via yarl
 iniconfig==2.1.0
     # via pytest
+jinja2==3.1.6
+    # via pytest-html
 jmespath==1.0.1
     # via
     #   aiobotocore
     #   botocore
+markupsafe==3.0.2
+    # via jinja2
 multidict==6.4.3
     # via
     #   aiobotocore
@@ -52,7 +56,14 @@ propcache==0.3.1
     #   aiohttp
     #   yarl
 pytest==8.3.5
+    # via
+    #   -r requirements.in
+    #   pytest-html
+    #   pytest-metadata
+pytest-html==4.1.1
     # via -r requirements.in
+pytest-metadata==3.1.1
+    # via pytest-html
 python-dateutil==2.9.0.post0
     # via
     #   aiobotocore
