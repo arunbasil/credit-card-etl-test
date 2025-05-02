@@ -1,24 +1,31 @@
 pipeline {
-    agent any // Use any available agent (ensure it has Python3, pip, git)
+    // Consider specifying the agent label used in your EC2 config
+    // agent { label 'aws-ec2-agent' }
+    agent any
 
     stages {
         stage('Clone') {
             steps {
                 echo "Cloning repository..."
-                // Fetches the code from the SCM configured in the Jenkins job
                 checkout scm
             }
         }
 
-        stage('Set up Python') {
+        stage('Set up Python 3.11') { // Stage name updated for clarity
             steps {
-                echo "Setting up Python virtual environment..."
+                echo "Setting up Python 3.11 virtual environment..."
                 sh '''
-                    # Ensure python3 is available on the agent
-                    python3 -m venv venv
+                    # Create venv using the installed python3.11
+                    python3.11 -m venv venv
+
+                    # Activate the new environment
                     source venv/bin/activate
+
+                    # Upgrade pip within the venv
                     pip install --upgrade pip
-                    # Installs dependencies from your committed requirements.txt
+
+                    # Install dependencies from your committed requirements.txt
+                    # This should now work as numpy 2.x is compatible with Python 3.11
                     pip install -r requirements.txt
                 '''
             }
@@ -28,26 +35,22 @@ pipeline {
             steps {
                 echo "Running tests..."
                 sh '''
-                    # Activate the virtual environment within this shell step
+                    # Activate the virtual environment (created with Python 3.11)
                     source venv/bin/activate
-                    # Run pytest on the 'test/' directory
-                    # --maxfail=1 stops the run on the first failing test
-                    # Removed report generation, quiet mode, and log redirection
+
+                    # Run pytest
                     pytest test/ --maxfail=1
                 '''
             }
         }
-        // Removed stages: 'Upload Report to S3', 'Archive Artifacts', 'Publish Report to Jenkins'
     }
 
     post {
-        // Basic messages about the build outcome
         always {
             echo "Pipeline completed with status: ${currentBuild.currentResult}"
         }
         failure {
             echo "Build failed. Please check the console output for errors."
-            // You could add notifications here (e.g., Slack, email) if desired
         }
     }
 }
